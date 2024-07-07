@@ -1,0 +1,17 @@
+name: Package video_audio_track_sync_scenes_dynamic_speed exe with PyInstaller - Windows
+
+on:
+  push:
+    branches: [ master, dev ]
+
+jobs:
+  pyinstaller-build:
+    runs-on: windows-latest
+    steps:
+      - name: Create Executable
+        uses: sayyid5416/pyinstaller@v1
+        with:
+          python_ver: '3.12.1'
+          spec: 'video-audio-track-sync-scenes-dynamic-speed/video_audio_track_sync_scenes_dynamic_speed.spec'
+          requirements: 'video-audio-track-sync-scenes-dynamic-speed/requirements.txt'
+          upload_exe_with_name: 'video_audio_track_sync_scenes_dynamic_speed'
