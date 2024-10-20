@@ -79,8 +79,31 @@ options:
                         magick binary path
 ```
 
+### `video_subs_track_sync_scenes_dynamic_speed`
+
+This script is almost identical to `video_audio_track_sync_scenes_dynamic_speed`, but it synchronizes subtitles instead of audio.
+
+```
+usage: video_subs_track_sync_scenes_dynamic_speed.py [-h] [-sp SOURCE_PATH] [-tp TARGET_PATH] [-ssp SOURCE_SUB_PATH] [-fdp FRAME_DIFF_PERCENTAGE] [-ff FFMPEG]
+
+Adjusts audio duration based on 2 safe frame pairs of videos
+
+options:
+  -h, --help            show this help message and exit
+  -sp SOURCE_PATH, --source-path SOURCE_PATH
+                        video with wrong timing
+  -tp TARGET_PATH, --target-path TARGET_PATH
+                        video with right timing
+  -ssp SOURCE_SUB_PATH, --source-sub-path SOURCE_SUB_PATH
+                        sub with wrong timing
+  -fdp FRAME_DIFF_PERCENTAGE, --frame-diff-percentage FRAME_DIFF_PERCENTAGE
+                        difference between frames to start a new scene
+  -ff FFMPEG, --ffmpeg FFMPEG
+                        ffmpeg binary path
+```
+
 ## Required Software
 
 - **[ffmpeg](https://ffmpeg.org/) (mandatory)**: Used to extract scene changes, get video information (fps, ticks per second, audio frequency, duration), and perform audio conversions.
-- **[rubberband](https://breakfastquay.com/rubberband/) (mandatory for dynamic_speed script)**: Used for applying dynamic speed changes to audio accurately.
+- **[rubberband](https://breakfastquay.com/rubberband/) (mandatory for dynamic_speed audio script)**: Used for applying dynamic speed changes to audio accurately.
 - **[imagemagick](https://imagemagick.org/) (optional for dynamic_speed script)**: Used to remove black bars from the sides of videos if present.
