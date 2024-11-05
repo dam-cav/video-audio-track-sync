@@ -470,10 +470,10 @@ if source_audio_ext != 'opus' and source_audio_ext != 'wav': # check here for fo
 timing_difference_from_matching_start = target_duration/source_duration
 
 rubberband_command = (
-    'rubberband '
+    '{rubberband} '
     '--timemap \"{source_dir}\\timecodes.txt\" '
     '-t {timing} \"{source_path}.{source_audio_ext}\" \"{target_path}.{source_audio_ext}\"'
-).format(source_dir=source_video_folder, timing=timing_difference_from_matching_start, source_path=source_path, target_path=os.path.splitext(target_path)[0], source_audio_ext=source_audio_ext)
+).format(rubberband=rubberband_script, source_dir=source_video_folder, timing=timing_difference_from_matching_start, source_path=source_path, target_path=os.path.splitext(target_path)[0], source_audio_ext=source_audio_ext)
 print('--------------------------')
 print(rubberband_command)
 print('--------------------------')
