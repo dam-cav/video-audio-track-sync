@@ -15,6 +15,12 @@ else:
     # The application is running in a normal Python environment
     from utils import *
 
+def get_audio_hz(video_path):
+    print('Getting audio hz via ffprobe...')
+    hz_cmd = f"ffprobe -v error -select_streams a:0 -show_entries stream=sample_rate -of default=noprint_wrappers=1:nokey=1 \"{video_path}\""
+    hz = subprocess.check_output(hz_cmd, shell=True, universal_newlines=True)
+    return int(hz)
+
 # Function to run FFmpeg command and capture frame information
 def capture_frame_info(video_path, output_folder, frame_diff, video_tbn, video_fps, video_pos_per_frame, edges_frame_search_minutes, ffmpeg_script):
     print('Getting video new scene frame information via ffmpeg...')
@@ -114,6 +120,10 @@ target_frames_folder = "TARGET_FRAMES"
 os.makedirs(source_frames_folder, exist_ok=True)
 os.makedirs(target_frames_folder, exist_ok=True)
 
+# Clean frame directories
+delete_frame_cache_files(source_frames_folder)
+delete_frame_cache_files(target_frames_folder)
+
 # Get FPS and TBN for the source video
 source_fps = get_fps(source_path)
 source_tbn = get_tbn(source_path)
@@ -188,18 +198,15 @@ print("Target video safe end frame info:")
 print(target_frame_info[target_end_frame])
 print("\n")
 
-# Clean frame directories
-delete_frame_cache_files(source_frames_folder)
-delete_frame_cache_files(target_frames_folder)
-
 # Calculate speed delta
 source_safe_duration_ms = (source_frame_info[source_end_frame]["pts"] - source_frame_info[source_start_frame]["pts"]) * 1000 / source_tbn 
 target_safe_duration_ms = (target_frame_info[target_end_frame]["pts"] - target_frame_info[target_start_frame]["pts"]) * 1000 / target_tbn
 
 speed_delta = source_safe_duration_ms / target_safe_duration_ms
+speed_delta_for_positon = target_safe_duration_ms / source_safe_duration_ms
 
 # Calculate start delta
-retimed_start =  source_frame_info[source_start_frame]["pts_ms"] * speed_delta
+retimed_start = source_frame_info[source_start_frame]["pts_ms"] * speed_delta_for_positon
 start_delta = (target_frame_info[target_start_frame]["pts_ms"] - (retimed_start))
 
 # Print commands to run and run them
@@ -219,6 +226,7 @@ if start_delta > 0:
         speed_delta = speed_delta,
         opus_workaround = OPUS_WORKAROUND,
         start_delta = start_delta,
+        source_audio_hz = 48000 if source_audio_hz == 44100 else source_audio_hz,
         output_name = os.path.splitext(target_path)[0],
         output_audio_ext = output_audio_ext
     )
@@ -233,9 +241,10 @@ else:
     ).format(
         ffmpeg = ffmpeg_script,
         source_path = source_path,
-        speed_delta = speed_delta, 
+        speed_delta = speed_delta,
         opus_workaround = OPUS_WORKAROUND,
-        start_delta = start_delta,
+        start_delta = abs(start_delta),
+        source_audio_hz = 48000 if source_audio_hz == 44100 else source_audio_hz,
         output_name = os.path.splitext(target_path)[0],
         output_audio_ext = output_audio_ext
     )
@@ -245,3 +254,10 @@ else:
     subprocess.run(ffmpeg_delta_negative_command, shell=True)
 
 open_folder(os.path.dirname(target_path))
+
+# Clean frame directories?
+clean_frame_dir = input("Do you want to clean frame directories? [Y/N]: ")
+
+if clean_frame_dir.lower() == 'y':
+    delete_frame_cache_files(source_frames_folder)
+    delete_frame_cache_files(target_frames_folder)
