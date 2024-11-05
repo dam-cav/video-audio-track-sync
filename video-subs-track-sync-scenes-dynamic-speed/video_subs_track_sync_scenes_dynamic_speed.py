@@ -34,12 +34,6 @@ def get_duration(video_path):
     duration = subprocess.check_output(duration_cmd, shell=True, universal_newlines=True)
     return float(duration)
 
-def get_audio_hz(video_path):
-    print('Getting audio hz via ffprobe...')
-    hz_cmd = f"ffprobe -v error -select_streams a:0 -show_entries stream=sample_rate -of default=noprint_wrappers=1:nokey=1 \"{video_path}\""
-    hz = subprocess.check_output(hz_cmd, shell=True, universal_newlines=True)
-    return int(hz)
-
 def get_audio_ext(video_path):
     print('Getting video audio extension via ffprobe...')
     audio_ext_cmd = f"ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 \"{video_path}\""
