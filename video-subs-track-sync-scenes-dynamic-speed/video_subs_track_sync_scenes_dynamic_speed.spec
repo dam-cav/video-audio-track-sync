@@ -5,7 +5,7 @@ a = Analysis(
     ['video_subs_track_sync_scenes_dynamic_speed.py'],
     pathex=['..'],
     binaries=[],
-    datas=[],
+    datas=[('../common/', 'common')],
     hiddenimports=['common.utils'],
     hookspath=[],
     hooksconfig={},
