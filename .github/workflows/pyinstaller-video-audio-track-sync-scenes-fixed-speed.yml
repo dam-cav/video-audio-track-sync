@@ -13,4 +13,5 @@ jobs:
         with:
           python_ver: '3.12.1'
           spec: 'video-audio-track-sync-scenes-fixed-speed/video_audio_track_sync_scenes_fixed_speed.spec'
+          requirements: 'video-audio-track-sync-scenes-fixed-speed/requirements.txt'
           upload_exe_with_name: 'video_audio_track_sync_scenes_fixed_speed'
