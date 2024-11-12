@@ -7,11 +7,11 @@ import imagehash
 import math
 import os
 import platform
+import pysubs2
 import re
 import subprocess
 import sys
 import webbrowser
-import pysubs2
 from PIL import Image
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'common'))

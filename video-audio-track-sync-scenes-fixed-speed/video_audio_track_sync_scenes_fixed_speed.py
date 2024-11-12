@@ -2,8 +2,9 @@
 # target - wrong language right timing
 
 import argparse
-import re
 import os
+import platform
+import re
 import subprocess
 import sys
 
